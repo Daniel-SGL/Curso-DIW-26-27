@@ -1,352 +1,143 @@
-/* ============================================================
-   04 · Variables CSS, color moderno y anidamiento — La Trastienda
-   ============================================================
-
-   Tokens de diseño (Figma → CSS) y anidamiento nativo (&).
-   Las capas @layer de la sesión 03 se conservan.
-   ============================================================ */
-
-/* Fuera de capa: solo universal y variables globales. */
-* {
-    box-sizing: border-box;
-}
-
+/* Escala de color primario (azules) */
 :root {
-    /* ===== TOKENS PRIMARIO (escala Figma 50 → 900) ===== */
-    --color-primary-50:  #eff6ff;
-    --color-primary-100: #dbeafe;
-    --color-primary-200: #bfdbfe;
-    --color-primary-300: #93c5fd;
-    --color-primary-400: #60a5fa;
-    --color-primary-500: #2563eb;   /* color principal de la marca */
-    --color-primary-600: #1d4ed8;   /* hover / active */
-    --color-primary-700: #1d40af;
-    --color-primary-800: #1e3a8a;
-    --color-primary-900: #172554;
+  --color-blue-50: #eff6ff;
+  --color-blue-100: #dbeafe;
+  --color-blue-200: #bfdbfe;
+  --color-blue-300: #93c5fd;
+  --color-blue-400: #60a5fa;
+  --color-blue-500: #3b82f6;
+  --color-blue-600: #2563eb;
+  --color-blue-700: #1d4ed8;
+  --color-blue-800: #1e40af;
+  --color-blue-900: #1e3a8a;
 
-    /* Versiones OKLCH del azul corporativo (luminosidad perceptual uniforme) */
-    --color-primary-500-oklch: oklch(0.55 0.22 260);
-    --color-primary-600-oklch: oklch(0.48 0.22 260);
+  /* Escala de colores neutros (grises) */
+  --color-gray-50: #f9fafb;
+  --color-gray-100: #f3f4f6;
+  --color-gray-200: #e5e7eb;
+  --color-gray-300: #d1d5db;
+  --color-gray-400: #9ca3af;
+  --color-gray-500: #6b7280;
+  --color-gray-600: #4b5563;
+  --color-gray-700: #374151;
+  --color-gray-800: #1f2937;
+  --color-gray-900: #111827;
 
-    /* ===== TOKENS NEUTROS (escala Figma 50 → 900) ===== */
-    --color-neutral-50:  #f8fafc;   /* fondo de página */
-    --color-neutral-100: #f1f5f9;   /* superficie de tarjetas */
-    --color-neutral-200: #e2e8f0;   /* bordes y separadores */
-    --color-neutral-300: #cbd5e1;
-    --color-neutral-500: #64748b;   /* texto secundario */
-    --color-neutral-800: #1e293b;
-    --color-neutral-900: #0f172a;   /* titulares y texto principal */
+  /* Mapeo semántico */
+  --bg-page: var(--color-gray-50);
+  --bg-card: #ffffff;
+  --text-main: var(--color-gray-900);
+  --text-muted: var(--color-gray-600);
+  --border-subtle: var(--color-gray-200);
+  --brand: var(--color-blue-700);
+  --brand-hover: var(--color-blue-800);
 
-    /* ===== VARIABLES SEMÁNTICAS (mapeo de propósito) ===== */
-    --bg-page:    var(--color-neutral-50);
-    --bg-card:    #ffffff;
-    --text-main:  var(--color-neutral-900);
-    --text-muted: var(--color-neutral-500);
-    --border-subtle: var(--color-neutral-200);
-    --brand:      var(--color-primary-500);
-    --brand-hover: var(--color-primary-600);
-    --radius-md:  8px;
-
-    /* ===== COLOR MODERNO: experimento oklch() ===== */
-    /* Acento para badge/botón especial, definido directamente en oklch().
-       L: luminosidad percibida | C: croma/pureza | H: matiz (0-360°) */
-    --color-accent-oklch: oklch(0.60 0.18 160);      /* verde esmeralda */
-    --color-accent-surface: oklch(0.97 0.04 160);    /* fondo suave del acento */
+  /* Variable de experimento */
+  --color-accent-oklch: oklch(0.65 0.18 40);
 }
 
-/* ============================================================
-   @layer base — estilos base / reset (fáciles de anular)
-   ============================================================ */
-@layer base {
-    :where(h1, h2, h3) {
-        margin-block: 0.5em;
-    }
-
-    body {
-        margin: 0;
-        padding-bottom: 70px;
-        font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-        color: var(--text-main);
-        background-color: var(--bg-page);
-        line-height: 1.5;
-    }
-
-    header {
-        background-color: #1d2d44;
-        color: #ffffff;
-        padding: 1rem 1.25rem;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    }
-
-    header h1 {
-        margin: 0;
-        font-size: 1.25rem;
-        color: #ffffff;
-    }
-
-    header a {
-        color: inherit;
-        font-weight: 700;
-        font-size: 1.2rem;
-    }
-
-    header button {
-        background: none;
-        border: none;
-        font-size: 1.2rem;
-        cursor: pointer;
-        color: #ffffff;
-    }
-
-    main {
-        max-width: 480px;
-        margin: 0 auto;
-        padding: 1rem;
-    }
-
-    h1, h2, h3 {
-        color: #0d1b2a;
-    }
-
-    h2 {
-        font-size: 1.2rem;
-        margin-top: 1.5rem;
-        margin-bottom: 0.75rem;
-    }
-
-    article {
-        background: #ffffff;
-        padding: 1rem;
-        border-radius: 8px;
-        margin-bottom: 0.75rem;
-        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
-    }
-
-    article h3,
-    article h2 {
-        margin: 0 0 0.35rem 0;
-        font-size: 1rem;
-    }
-
-    article p {
-        margin: 0.25rem 0;
-        font-size: 0.9rem;
-        color: #555b6e;
-    }
-
-    a {
-        color: var(--brand);
-        text-decoration: none;
-    }
-
-    a:hover,
-    a:focus-visible {
-        color: #962d22;
-        text-decoration: underline;
-    }
-
-    button {
-        cursor: pointer;
-    }
-
-    ul {
-        list-style: none;
-        padding: 0;
-        margin: 0;
-    }
-
-    dl {
-        background: #ffffff;
-        padding: 1rem;
-        border-radius: 8px;
-        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
-    }
-
-    dl > div {
-        display: flex;
-        justify-content: space-between;
-        margin-bottom: 0.5rem;
-    }
-
-    dl dt {
-        color: var(--text-muted);
-    }
-
-    dl dd {
-        margin: 0;
-        font-weight: 600;
-    }
+body {
+  min-height: 100vh;
+  margin: 0;
+  background-color: var(--bg-page);
+  color: var(--text-main);
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  line-height: 1.5;
 }
 
-/* ============================================================
-   @layer components — componentes con anidamiento nativo (&)
-   ============================================================ */
-@layer components {
-    /* Barra de navegación inferior — refactorizada con anidamiento nativo */
-    nav[aria-label="Secciones de la app"] {
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        background-color: var(--bg-card);
-        border-top: 1px solid var(--border-subtle);
-        box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.05);
+nav {
+  padding: 1rem;
 
-        ul {
-            display: flex;
-            justify-content: space-around;
-            padding: 0.75rem 0;
-            margin: 0;
-            list-style: none;
-        }
+  > ul {
+    display: flex;
+    gap: 1.5rem;
+    justify-content: center;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
 
-        a {
-            color: var(--text-muted);
-            font-size: 0.85rem;
-            text-decoration: none;
+  a {
+    color: var(--text-main);
+    font-weight: 600;
+    text-decoration: none;
 
-            &[aria-current="page"] {
-                color: var(--brand);
-                font-weight: 700;
-            }
-
-            &:hover {
-                color: var(--text-main);
-            }
-
-            &:focus-visible {
-                outline: 2px solid var(--brand);
-                outline-offset: 2px;
-            }
-        }
+    &:hover {
+      color: var(--brand-hover);
     }
 
-    /* Tarjeta de libro — anidamiento y tokens semánticos */
-    .card {
-        background-color: var(--bg-card);
-        border: 1px solid var(--border-subtle);
-        border-radius: var(--radius-md);
-        padding: 1rem;
-        margin-bottom: 0.75rem;
-        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
-
-        &:hover {
-            border-color: var(--brand);
-        }
-
-        h3,
-        h2 {
-            margin: 0 0 0.35rem 0;
-            font-size: 1rem;
-            color: var(--text-main);
-        }
-
-        p {
-            margin: 0.25rem 0;
-            font-size: 0.9rem;
-            color: var(--text-muted);
-        }
-
-        /* Badge con texto y badge vacío */
-        .badge {
-            display: inline-block;
-            font-size: 0.7rem;
-            padding: 0.15rem 0.45rem;
-            background-color: var(--color-neutral-100);
-            color: var(--text-muted);
-            border: 1px solid var(--border-subtle);
-            border-radius: 4px;
-            margin-left: 0.5rem;
-            vertical-align: middle;
-        }
-
-        .badge:empty {
-            display: none;
-        }
-
-        /* Variante de acento con oklch() (ámbito local de variables) */
-        .badge--accent {
-            --badge-bg: var(--color-accent-surface);
-            --badge-color: var(--color-accent-oklch);
-            background-color: var(--badge-bg);
-            color: var(--badge-color);
-            border: 1px solid var(--color-accent-oklch);
-        }
-
-        /* Tarjeta que contiene un badge con texto */
-        &:has(.badge:not(:empty)) {
-            border-color: var(--brand);
-        }
-
-        button {
-            background-color: #1d2d44;
-            color: #ffffff;
-            border: none;
-            padding: 0.5rem 0.9rem;
-            border-radius: 4px;
-            font-size: 0.85rem;
-        }
-
-        button:hover {
-            background-color: #0d1b2a;
-        }
+    &[aria-current="page"] {
+      color: var(--brand);
+      text-decoration: underline;
+      text-underline-offset: 0.25rem;
     }
-
-    /* Selectores de componente que no pertenecen al anidamiento de .card */
-    .card :is(h3, p) {
-        margin: 0;
-    }
-
-    .card:nth-child(even) {
-        background-color: var(--color-neutral-100);
-    }
-
-    h2 + .card {
-        border-top: 2px solid var(--brand);
-    }
-
-    /* Botones de solo icono (aria-label) */
-    button[aria-label] {
-        padding: 0.35rem 0.5rem;
-        font: revert;
-    }
-
-    article button,
-    section > button {
-        background-color: #1d2d44;
-        color: #ffffff;
-        border: none;
-        padding: 0.5rem 0.9rem;
-        border-radius: 4px;
-        font-size: 0.85rem;
-    }
-
-    article button:hover,
-    section > button:hover {
-        background-color: #0d1b2a;
-    }
+  }
 }
 
-/* ============================================================
-   @layer utilities — utilidades (capa posterior: gana a components)
-   ============================================================ */
-@layer utilities {
-    .text-primary {
-        color: var(--brand);
+main {
+  display: grid;
+  place-items: center;
+  min-height: calc(100vh - 4rem);
+  padding: 2rem 1rem;
+}
+
+.card {
+  width: min(100%, 26rem);
+  padding: 1.5rem;
+  border: 1px solid var(--border-subtle);
+  border-radius: 0.75rem;
+  background-color: var(--bg-card);
+  color: var(--text-main);
+  box-shadow: 0 0.25rem 0.75rem var(--border-subtle);
+  transition: border-color 160ms ease, transform 160ms ease;
+
+  &:hover {
+    border-color: var(--brand);
+    transform: translateY(-2px);
+  }
+
+  .card-content {
+    display: grid;
+    gap: 0.5rem;
+  }
+
+  .card-title {
+    margin: 0;
+    color: var(--text-main);
+    font-size: 1.5rem;
+  }
+
+  .card-author {
+    margin: 0;
+    color: var(--text-muted);
+  }
+
+  .card-price {
+    margin: 0.5rem 0;
+    color: var(--brand);
+    font-size: 1.25rem;
+    font-weight: 700;
+  }
+
+  .btn-buy {
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--brand);
+    border-radius: 0.5rem;
+    background-color: var(--brand);
+    color: var(--bg-card);
+    font: inherit;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 160ms ease, border-color 160ms ease;
+
+    &:hover {
+      border-color: var(--brand-hover);
+      background-color: var(--brand-hover);
     }
 
-    .border-primary {
-        border-color: var(--brand);
+    &:focus-visible {
+      outline: 3px solid var(--brand-hover);
+      outline-offset: 2px;
     }
-
-    .badge--accent {
-        --badge-bg: var(--color-accent-surface);
-        --badge-color: var(--color-accent-oklch);
-        background-color: var(--badge-bg);
-        color: var(--badge-color);
-        border: 1px solid var(--color-accent-oklch);
-    }
+  }
 }
